@@ -15,10 +15,14 @@ public:
 	BiValue(int, int, std::string);
 	virtual ~BiValue();
 	BiValue(const BiValue &other);
+	BiValue(BiValue &&other);
+
+	BiValue& operator=(const BiValue &other);
+	BiValue& operator=(BiValue &&other);
 	bool operator==(const BiValue& bv) const;
 	bool operator<(const BiValue& bv) const;
 	bool operator>(const BiValue& bv) const;
-	void print();
+	void print() const;
 	int sortValue() const;
 	int secondarySortValue() const;
 	bool isEqual(int, int) const;
