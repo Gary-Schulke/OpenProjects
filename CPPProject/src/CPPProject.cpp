@@ -12,10 +12,20 @@
 #include <memory>
 #include <exception>
 #include <list>
+#include <fstream>
+#include <map>
 #include "Base.h"
 #include "BiValue.h"
+#include "BiFilter.h"
+#include <signal.h>
 using namespace std;
 
+volatile sig_atomic_t gSignalStatus;
+
+void signal_handler(int signal){
+	gSignalStatus = signal;
+	cout << "signal:" << gSignalStatus << endl;
+}
 void pointerStuff() {
 	Base base = Base();
 	cout << __cplusplus << endl;
@@ -106,12 +116,59 @@ void mapStuff(){
 	cout << itr->first << " " << itr->second << endl;
 }
 
+void fileWriteStuff(){
+	ofstream myfile;
+	myfile.open("example.txt");
+	myfile << "Writing this to a file.\n";
+	myfile.close();
+
+}
+
+
+void fileReadStuff(){
+	string line;
+	ifstream myfile;
+	myfile.open("example.txt");
+	if (myfile.is_open()){
+		while (getline(myfile, line)){
+			cout << line << endl;
+		}
+	}
+	myfile.close();
+
+}
+
+void mapStuff2(){
+	std::map<std::string, std::string>  myMap;
+	myMap["first"] = "one";
+	myMap["second"] = "two";
+	myMap["third"] = "three";
+
+	cout << myMap["second"] << endl;
+}
+
+void signalStuff(){
+	cout << "SignalValue: " << gSignalStatus << endl;
+	cout << "Sending signal: " << SIGINT << endl;
+	raise(SIGINT);
+	cout << "New signal: " << SIGINT << endl;
+
+}
 int main() {
 	cout << "!!!CPP Project Hello World!!!" << endl; // prints !!!CPP Project Hello World!!!
 //	pointerStuff();
 	listStuff();
 //	queueStuff();
-	mapStuff();
+//	mapStuff();
+	//fileWriteStuff();
+	//fileReadStuff();
+	//mapStuff2();
+	BiFilter ftr = BiFilter();
+	bfilter bf = ftr.sorter();
+	bf(1,2,"three");
+
+	signalStuff();
+
 	return 0;
 
 }
